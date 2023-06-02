@@ -1,30 +1,25 @@
-
-const Hello = (props) => {
-  const name = props.name
-  const age = props.age
-
-  const bornYear = () => new Date().getFullYear() - age
-  return (
-    <div>
-      <p>
-        Hello {name}, you are {age} years old
-      </p>
-      <p>So you were probably born in {bornYear()}</p>
-    </div>
-  )
-}
-
+import { useState } from "react"
 const App = () => {
-  const name = 'Jack'
-  const age = 26
+  const [counter, setCounter] = useState(0)
+  console.log('rendering with bebsi value', counter)
+  const giveBebis = () => { setCounter(counter + 1); console.log('increasing, Bebis before', counter) }
+  const noPebis = () => { setCounter(0); console.log('resetting to zero(not coke zero), Pebis before', counter) }
+  const lessPepis = () => { setCounter(counter - 1); console.log('decreasing, Pepis before', counter) }
 
   return (
     <div>
-      <h1>Greetings</h1>
-      <Hello name="Sam" age={25 + 10} />
-      <Hello name={name} age={age} />
+      <div>{counter} Bebsi amount🥤🔴➕🔵</div>
+      <button onClick={giveBebis}>
+        give Bebis 😳
+      </button>
+      <button onClick={lessPepis}>
+        less Pepis 😑
+      </button>
+      <button onClick={noPebis}>
+        no Pebis 😠
+      </button>
     </div>
   )
 }
 
-export default App;
+export default App
