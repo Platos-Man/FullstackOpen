@@ -11,14 +11,38 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-
+  const points = Array(anecdotes.length).fill(0)
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(points)
+
+  const randomize = () => setSelected(Math.floor(Math.random() * anecdotes.length))
+  const vote = () => {
+    const copy = [...votes];
+    copy[selected] += 1;
+    setVotes(copy);
+  }
+
+  console.log(votes)
+  console.log(selected, "selected")
+  console.log(votes.indexOf(Math.max(...votes)), "index")
 
   return (
     <div>
-      {anecdotes[selected]}
+      <h1>Anecdote of the day</h1>
+      <div>
+        {anecdotes[selected]}
+      </div>
+      <div>has {votes[selected]} votes</div>
+      <button onClick={vote}>
+        vote
+      </button>
+      <button onClick={randomize}>
+        next anecdote
+      </button>
+      <h1>Anecdote with most votes</h1>
+      <div>{anecdotes[votes.indexOf(Math.max(...votes))]}</div>
     </div>
   )
 }
 
-export default App
+export default App;
