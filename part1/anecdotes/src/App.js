@@ -22,10 +22,6 @@ const App = () => {
     setVotes(copy);
   }
 
-  console.log(votes)
-  console.log(selected, "selected")
-  console.log(votes.indexOf(Math.max(...votes)), "index")
-
   return (
     <div>
       <h1>Anecdote of the day</h1>
