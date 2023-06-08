@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const checkDuplicate = (list, element) => list.includes(element);
 
-const Person = (person) => (
+const Person = person => (
   <div key={person.name}>
     {person.name} {person.number}
   </div>
@@ -13,18 +13,11 @@ const ListPersons = ({ persons }) => persons.map(Person);
 const Filter = ({ newFilter, handleFilterChange }) => {
   return (
     <div>
-      filter shown with{" "}
-      <input value={newFilter} onChange={handleFilterChange}></input>
+      filter shown with <input value={newFilter} onChange={handleFilterChange}></input>
     </div>
   );
 };
-const AddPerson = ({
-  addPerson,
-  newName,
-  newNumber,
-  handleNameChange,
-  handleNumberChange,
-}) => {
+const AddPerson = ({ addPerson, newName, newNumber, handleNameChange, handleNumberChange }) => {
   return (
     <form onSubmit={addPerson}>
       <div>
@@ -52,22 +45,20 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
 
-  const addPerson = (event) => {
+  const addPerson = event => {
     event.preventDefault();
     const newPerson = { name: newName, number: newNumber };
-    const personList = persons.map((person) => person.name);
+    const personList = persons.map(person => person.name);
     checkDuplicate(personList, newPerson.name)
       ? alert(`${newPerson.name} is already added to phonebook`)
       : setPersons(persons.concat(newPerson));
     setNewName("");
     setNewNumber("");
   };
-  const handleNameChange = (event) => setNewName(event.target.value);
-  const handleNumberChange = (event) => setNewNumber(event.target.value);
-  const handleFilterChange = (event) => setNewFilter(event.target.value);
-  const filteredPersons = persons.filter((person) =>
-    person.name.toLowerCase().includes(newFilter.toLowerCase())
-  );
+  const handleNameChange = event => setNewName(event.target.value);
+  const handleNumberChange = event => setNewNumber(event.target.value);
+  const handleFilterChange = event => setNewFilter(event.target.value);
+  const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()));
   console.log(newFilter);
 
   return (
