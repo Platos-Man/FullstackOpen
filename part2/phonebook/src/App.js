@@ -19,12 +19,12 @@ const Person = ({ name, number, id, setPersons, persons }) => {
 };
 
 const ListPersons = ({ persons, setPersons }) =>
-  persons.map((item) => (
+  persons.map((person) => (
     <Person
-      key={item.id}
-      name={item.name}
-      number={item.number}
-      id={item.id}
+      key={person.id}
+      name={person.name}
+      number={person.number}
+      id={person.id}
       setPersons={setPersons}
       persons={persons}
     />
