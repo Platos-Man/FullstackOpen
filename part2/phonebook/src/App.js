@@ -1,16 +1,34 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import contactService from "./services/contacts";
 
 const checkDuplicate = (list, element) => list.includes(element);
 
-const Person = (person) => (
-  <div key={person.name}>
-    {person.name} {person.number}
-  </div>
-);
+const Person = ({ name, number, id, setPersons, persons }) => {
+  const removePerson = (id) => {
+    contactService.remove(id).then(() => {
+      setPersons(persons.filter((person) => id !== person.id));
+    });
+  };
 
-const ListPersons = ({ persons }) => persons.map(Person);
+  return (
+    <div key={name} style={{ border: "1px solid blue" }}>
+      {name} {number} {id}
+      <button onClick={() => removePerson(id)}>delete</button>
+    </div>
+  );
+};
+
+const ListPersons = ({ persons, setPersons }) =>
+  persons.map((item) => (
+    <Person
+      key={item.id}
+      name={item.name}
+      number={item.number}
+      id={item.id}
+      setPersons={setPersons}
+      persons={persons}
+    />
+  ));
 
 const Filter = ({ newFilter, handleFilterChange }) => {
   return (
@@ -52,16 +70,15 @@ const App = () => {
     const personList = persons.map((person) => person.name);
     checkDuplicate(personList, newPerson.name)
       ? alert(`${newPerson.name} is already added to phonebook`)
-      : contactService.create(newPerson).then((returnedPerson) => setPersons(persons.concat(newPerson)));
-
+      : contactService.create(newPerson).then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
     setNewName("");
     setNewNumber("");
   };
+
   const handleNameChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
   const handleFilterChange = (event) => setNewFilter(event.target.value);
   const filteredPersons = persons.filter((person) => person.name.toLowerCase().includes(newFilter.toLowerCase()));
-  console.log(newFilter);
 
   return (
     <div>
@@ -76,7 +93,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <ListPersons persons={filteredPersons} />
+      <ListPersons persons={filteredPersons} setPersons={setPersons} />
     </div>
   );
 };
