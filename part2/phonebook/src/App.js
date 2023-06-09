@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const checkDuplicate = (list, element) => list.includes(element);
 
-const Person = person => (
+const Person = (person) => (
   <div key={person.name}>
     {person.name} {person.number}
   </div>
@@ -34,31 +35,30 @@ const AddPerson = ({ addPerson, newName, newNumber, handleNameChange, handleNumb
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040 - 1234567" },
-    { name: "Samimas Santamaamatnas", number: "80085" },
-    { name: "AnttiAnttila", number: "52315311" },
-    { name: "Pekka Panttila", number: "2152315623" },
-    { name: "Pirjo Pönttölä", number: "01525002" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
 
-  const addPerson = event => {
+  const hook = () => {
+    axios.get("http://localhost:3001/persons").then((response) => setPersons(response.data));
+  };
+  useEffect(hook, []);
+
+  const addPerson = (event) => {
     event.preventDefault();
     const newPerson = { name: newName, number: newNumber };
-    const personList = persons.map(person => person.name);
+    const personList = persons.map((person) => person.name);
     checkDuplicate(personList, newPerson.name)
       ? alert(`${newPerson.name} is already added to phonebook`)
       : setPersons(persons.concat(newPerson));
     setNewName("");
     setNewNumber("");
   };
-  const handleNameChange = event => setNewName(event.target.value);
-  const handleNumberChange = event => setNewNumber(event.target.value);
-  const handleFilterChange = event => setNewFilter(event.target.value);
-  const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()));
+  const handleNameChange = (event) => setNewName(event.target.value);
+  const handleNumberChange = (event) => setNewNumber(event.target.value);
+  const handleFilterChange = (event) => setNewFilter(event.target.value);
+  const filteredPersons = persons.filter((person) => person.name.toLowerCase().includes(newFilter.toLowerCase()));
   console.log(newFilter);
 
   return (
