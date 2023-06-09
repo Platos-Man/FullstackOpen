@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import contactService from "./services/contacts";
 
 const checkDuplicate = (list, element) => list.includes(element);
 
@@ -41,7 +42,7 @@ const App = () => {
   const [newFilter, setNewFilter] = useState("");
 
   const hook = () => {
-    axios.get("http://localhost:3001/persons").then((response) => setPersons(response.data));
+    contactService.getAll().then((initialContacts) => setPersons(initialContacts));
   };
   useEffect(hook, []);
 
@@ -51,7 +52,8 @@ const App = () => {
     const personList = persons.map((person) => person.name);
     checkDuplicate(personList, newPerson.name)
       ? alert(`${newPerson.name} is already added to phonebook`)
-      : setPersons(persons.concat(newPerson));
+      : contactService.create(newPerson).then((returnedPerson) => setPersons(persons.concat(newPerson)));
+
     setNewName("");
     setNewNumber("");
   };
