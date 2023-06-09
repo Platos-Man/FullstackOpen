@@ -19,8 +19,8 @@ const App = () => {
       content: newNote,
       important: Math.random() < 0.5,
     }
-    noteService.create(noteObject).then((response) => {
-      setNotes(allNotes.concat(response.data))
+    noteService.create(noteObject).then((returnedNote) => {
+      setNotes(allNotes.concat(returnedNote))
       setNewNote('')
     })
   }
@@ -29,8 +29,9 @@ const App = () => {
     const note = allNotes.find((n) => n.id === id)
     const changedNote = { ...note, important: !note.important }
 
-    noteService.update(id, changedNote).then((response) => {
-      setNotes(allNotes.map(note.id !== id ? note : response.data))
+    noteService.update(id, changedNote).then((returnedNote) => {
+      console.log(returnedNote)
+      setNotes(allNotes.map((note) => (note.id !== id ? note : returnedNote)))
     })
   }
 

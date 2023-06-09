@@ -8,7 +8,7 @@
     {
       "id": 2,
       "content": "Browser can execute only JavaScript",
-      "important": false
+      "important": true
     },
     {
       "id": 3,
@@ -23,11 +23,16 @@
     {
       "id": 5,
       "content": ">:(",
-      "important": true
+      "important": false
     },
     {
       "id": 6,
       "content": "d(*_* )b",
+      "important": false
+    },
+    {
+      "id": 7,
+      "content": "JeeSus",
       "important": false
     }
   ]
