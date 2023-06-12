@@ -7,5 +7,10 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-const exportMethdods = { getAll };
+const get = (country) => {
+  const request = axios.get(`${baseUrl}/name/${country}`);
+  return request.then((request) => request.data);
+};
+
+const exportMethdods = { getAll, get };
 export default exportMethdods;
