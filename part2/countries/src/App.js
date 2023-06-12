@@ -120,6 +120,7 @@ const Countries = () => {
 };
 
 function App() {
+  console.log(process.env.REACT_APP_API_KEY);
   return <Countries />;
 }
 
