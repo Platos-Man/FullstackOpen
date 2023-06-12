@@ -68,15 +68,15 @@ const CountryList = ({ newFilter, setNewFilter, show, setShow, country, setCount
     }
   }, [getCountry, setCountry]);
 
-  // useEffect(() => {
-  //   if (country !== null) {
-  //     weatherService.get(country.latlng[0], country.latlng[1]).then((initialWeather) => setWeather(initialWeather));
-  //   }
-  // }, [country]);
+  useEffect(() => {
+    if (country !== null) {
+      weatherService.get(country.latlng[0], country.latlng[1]).then((initialWeather) => setWeather(initialWeather));
+    }
+  }, [country]);
   if (!countries) {
     return null;
   }
-  // console.log(weather);
+  console.log(weather);
 
   const filteredCountries = countries.filter((country) => {
     return country.name.common.toLowerCase().includes(newFilter.toLowerCase());
