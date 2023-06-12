@@ -19,7 +19,7 @@ const Footer = () => {
 }
 
 const App = () => {
-  const [allNotes, setNotes] = useState([])
+  const [allNotes, setNotes] = useState(null)
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [errorMessage, setErrorMessage] = useState('some error happened...')
@@ -28,6 +28,10 @@ const App = () => {
     noteService.getAll().then((initialNotes) => setNotes(initialNotes))
   }
   useEffect(hook, [])
+
+  if (!allNotes) {
+    return null
+  }
 
   const addNote = (event) => {
     event.preventDefault()
