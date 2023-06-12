@@ -5,14 +5,18 @@ const checkDuplicate = (list, element) => list.includes(element);
 
 const Person = ({ name, number, id, setPersons, persons }) => {
   const removePerson = (id) => {
-    contactService.remove(id).then(() => {
-      setPersons(persons.filter((person) => id !== person.id));
-    });
+    const person = persons.find((person) => person.id === id);
+
+    if (window.confirm(`Delete ${person.name}?`)) {
+      contactService.remove(id).then(() => {
+        setPersons(persons.filter((person) => id !== person.id));
+      });
+    }
   };
 
   return (
-    <div key={name} style={{ border: "1px solid blue" }}>
-      {name} {number} {id}
+    <div key={name}>
+      {name} {number}
       <button onClick={() => removePerson(id)}>delete</button>
     </div>
   );
@@ -68,9 +72,18 @@ const App = () => {
     event.preventDefault();
     const newPerson = { name: newName, number: newNumber };
     const personList = persons.map((person) => person.name);
-    checkDuplicate(personList, newPerson.name)
-      ? alert(`${newPerson.name} is already added to phonebook`)
-      : contactService.create(newPerson).then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+    if (checkDuplicate(personList, newPerson.name)) {
+      if (window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const person = persons.find((person) => person.name === newPerson.name);
+        const changedPerson = { ...person, number: newPerson.number };
+        const id = person.id;
+        contactService.update(id, changedPerson).then((returnedPerson) => {
+          setPersons(persons.map((person) => (person.id !== id ? person : returnedPerson)));
+        });
+      }
+    } else {
+      contactService.create(newPerson).then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+    }
     setNewName("");
     setNewNumber("");
   };
