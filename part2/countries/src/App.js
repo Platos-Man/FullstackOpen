@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import countryService from "./services/countries";
+import weatherService from "./services/weather";
 
 const CountrySearch = ({ newFilter, handleFilterChange }) => {
   return (
@@ -53,9 +54,10 @@ const ListedCountry = ({ name, setNewFilter, setGetCountry, setShow }) => {
   );
 };
 
-const CountryList = ({ newFilter, setNewFilter, show, setShow, country, setCountry }) => {
+const CountryList = ({ newFilter, setNewFilter, show, setShow, country, setCountry, getCountry, setGetCountry }) => {
   const [countries, setCountries] = useState(null);
-  const [getCountry, setGetCountry] = useState(null);
+
+  const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     countryService.getAll().then((initialCountries) => setCountries(initialCountries));
@@ -65,9 +67,16 @@ const CountryList = ({ newFilter, setNewFilter, show, setShow, country, setCount
       countryService.get(getCountry).then((initialCountry) => setCountry(initialCountry));
     }
   }, [getCountry, setCountry]);
+
+  // useEffect(() => {
+  //   if (country !== null) {
+  //     weatherService.get(country.latlng[0], country.latlng[1]).then((initialWeather) => setWeather(initialWeather));
+  //   }
+  // }, [country]);
   if (!countries) {
     return null;
   }
+  // console.log(weather);
 
   const filteredCountries = countries.filter((country) => {
     return country.name.common.toLowerCase().includes(newFilter.toLowerCase());
@@ -77,7 +86,10 @@ const CountryList = ({ newFilter, setNewFilter, show, setShow, country, setCount
   } else if (filteredCountries.length > 10) {
     return <div>Too many matches, specify another filter</div>;
   } else if (filteredCountries.length === 1) {
-    return <Country country={filteredCountries[0]} />;
+    if (getCountry !== filteredCountries[0].name.common.toLowerCase()) {
+      setGetCountry(filteredCountries[0].name.common.toLowerCase());
+    }
+    return <Country country={country} />;
   } else {
     return filteredCountries.map((country) => (
       <ListedCountry
@@ -95,6 +107,7 @@ const Countries = () => {
   const [newFilter, setNewFilter] = useState("");
   const [show, setShow] = useState(false);
   const [country, setCountry] = useState(null);
+  const [getCountry, setGetCountry] = useState(null);
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value);
     if (show) {
@@ -102,6 +115,9 @@ const Countries = () => {
     }
     if (country !== null) {
       setCountry(null);
+    }
+    if (getCountry !== null) {
+      setGetCountry(null);
     }
   };
   return (
@@ -114,6 +130,8 @@ const Countries = () => {
         setShow={setShow}
         country={country}
         setCountry={setCountry}
+        getCountry={getCountry}
+        setGetCountry={setGetCountry}
       />
     </div>
   );
