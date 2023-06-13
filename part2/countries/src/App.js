@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import countryService from "./services/countries";
 import weatherService from "./services/weather";
 
+function useCountries() {
+  const [countries, setCountries] = useState(null);
+  useEffect(() => {
+    countryService.getAll().then((initialCountries) => setCountries(initialCountries));
+  }, []);
+  return countries;
+}
+
 const CountrySearch = ({ newFilter, handleFilterChange }) => {
   return (
     <div>
@@ -77,15 +85,12 @@ const CountryList = ({ setNewFilter, country, getCountry, setGetCountry, filtere
 };
 
 const Countries = () => {
-  const [countries, setCountries] = useState(null);
   const [newFilter, setNewFilter] = useState("");
   const [country, setCountry] = useState(null);
   const [getCountry, setGetCountry] = useState(null);
   const [weather, setWeather] = useState(null);
 
-  useEffect(() => {
-    countryService.getAll().then((initialCountries) => setCountries(initialCountries));
-  }, []);
+  const countries = useCountries();
 
   useEffect(() => {
     if (getCountry !== null && country === null) {
