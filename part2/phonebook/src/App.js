@@ -104,14 +104,23 @@ const App = () => {
         });
       }
     } else {
-      contactService.create(newPerson).then((returnedPerson) => {
-        setNotification(`Added ${returnedPerson.name}`);
-        setNotificationType("notification");
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
-        setPersons(persons.concat(returnedPerson));
-      });
+      contactService
+        .create(newPerson)
+        .then((returnedPerson) => {
+          setNotification(`Added ${returnedPerson.name}`);
+          setNotificationType("notification");
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+          setPersons(persons.concat(returnedPerson));
+        })
+        .catch((error) => {
+          setNotification(error.response.data.error);
+          setNotificationType("error");
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        });
     }
 
     setNewName("");
